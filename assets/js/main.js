@@ -2167,7 +2167,7 @@ function clearFilters() {
 }
 
 function exportData() {
-    exportToCSV(currentData, 'all_genz_data.csv');
+    exportToCSV(filteredData, 'filtered_genz_data.csv');
 }
 
 function exportFilteredData() {
@@ -2182,6 +2182,58 @@ function exportTopPerformers() {
     exportToCSV(topPerformers, 'top_performers_genz_data.csv');
 }
 
+function exportSummaryData() {
+    if (summaryData.length === 0) {
+        alert('No summary data to export');
+        return;
+    }
+    
+    // Create CSV headers for summary data
+    const headers = [
+        'City (DMA)',
+        'Population',
+        'Gen Z Females',
+        'Concentration %',
+        'Index',
+        'Age 15-19 %',
+        'Age 20-24 %',
+        'Age 25-29 %',
+        'ZIP Count'
+    ];
+    
+    // Create CSV content
+    let csvContent = headers.join(',') + '\n';
+    
+    summaryData.forEach(item => {
+        const row = [
+            `"${item.dma}"`,
+            item.population,
+            item.genZFemales,
+            item.concentration.toFixed(2),
+            item.index.toFixed(1),
+            item.age15_19.toFixed(1),
+            item.age20_24.toFixed(1),
+            item.age25_29.toFixed(1),
+            item.zipCount
+        ];
+        csvContent += row.join(',') + '\n';
+    });
+    
+    // Create and download file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    
+    if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'city_summary_data.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
+
 function exportToCSV(data, filename) {
     if (data.length === 0) {
         alert('No data to export');
@@ -2192,7 +2244,6 @@ function exportToCSV(data, filename) {
     const headers = [
         'City (DMA)',
         'ZIP Code', 
-        'Region',
         'Population',
         'Gen Z Females',
         'Concentration %',
@@ -2209,7 +2260,6 @@ function exportToCSV(data, filename) {
         const row = [
             `"${item.dma}"`,
             item.zip,
-            `"${item.region}"`,
             item.population,
             item.genZFemales,
             item.concentration.toFixed(2),
@@ -2243,7 +2293,6 @@ function generateSummary() {
     const totalIndex = filteredData.reduce((sum, item) => sum + item.index, 0);
     const highPerformers = filteredData.filter(item => item.index >= 120).length;
     const uniqueCities = [...new Set(filteredData.map(item => item.dma))].length;
-    const uniqueRegions = [...new Set(filteredData.map(item => item.region))].length;
     
     const summary = `
 GEN Z FEMALE POPULATION ANALYSIS SUMMARY
@@ -2256,7 +2305,6 @@ Dataset Overview:
 - Total Gen Z Index: ${totalIndex.toFixed(1)}
 - High Performers (Index ≥120): ${highPerformers}
 - Cities Covered: ${uniqueCities}
-- Regions Covered: ${uniqueRegions}
 
 Top Performing Cities:
 ${filteredData
