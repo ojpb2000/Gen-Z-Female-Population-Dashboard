@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gen Z Female Population Dashboard - TBWA Data Intelligence</title>
+    <meta name="description" content="Interactive dashboard analyzing Gen Z female population distribution across US ZIP codes">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1>Gen Z Female Population Dashboard</h1>
+            <p>TBWA Data Intelligence • Interactive Analysis of US ZIP Code Distribution</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <ul class="nav-list">
+                <li><button class="nav-link active" data-tab="national">National Landscape</button></li>
+                <li><button class="nav-link" data-tab="champions">Concentration Champions</button></li>
+                <li><button class="nav-link" data-tab="age">Age Divide</button></li>
+                <!-- <li><button class="nav-link" data-tab="map">Opportunity Map</button></li> -->
+                <li><button class="nav-link" data-tab="explorer">Data Explorer</button></li>
+                <li><button class="nav-link" data-tab="patterns">Cultural Patterns</button></li>
+                <li><button class="nav-link" data-tab="methodology">Methodology</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- National Landscape Tab -->
+            <div id="national" class="tab-content active">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">The National Landscape</h2>
+                        <p class="card-subtitle">Understanding the national context of Gen Z female population distribution</p>
+                    </div>
+                </div>
+
+                <!-- KPI Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="nationalBenchmark">8.41%</div>
+                        <div class="kpi-label">National Benchmark</div>
+                        <div class="kpi-description">Gen Z Female %</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="nationalGenZ">32.4M</div>
+                        <div class="kpi-label">Total Gen Z Females</div>
+                        <div class="kpi-description">Nationwide</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="nationalPopulation">337.0M</div>
+                        <div class="kpi-label">Total Population</div>
+                        <div class="kpi-description">Nationwide</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="nationalDMAs">210</div>
+                        <div class="kpi-label">DMAs Analyzed</div>
+                        <div class="kpi-description">Cities covered</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="nationalHighPerformers">0</div>
+                        <div class="kpi-label">High Performers</div>
+                        <div class="kpi-description">Index ≥120</div>
+                    </div>
+                </div>
+
+                <!-- Charts Grid -->
+                <div class="charts-grid">
+                    <!-- National Distribution Chart -->
+                    <div class="chart-container">
+                        <h3 class="chart-title">National Population Distribution</h3>
+                        <canvas id="nationalChart"></canvas>
+                        <p class="chart-description">
+                            The national benchmark of 9.61% represents the average concentration of Gen Z females across all US ZIP codes, 
+                            serving as our baseline for identifying high-potential markets.
+                        </p>
+                    </div>
+
+                    <!-- Top Cities Chart -->
+                    <div class="chart-container">
+                        <h3 class="chart-title">Top 10 Cities vs National Benchmark</h3>
+                        <canvas id="citiesChart"></canvas>
+                        <p class="chart-description">
+                            Gainesville leads with 15.01% Gen Z concentration, 56% above the national average. 
+                            University cities consistently outperform the benchmark.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Scatter Plot -->
+                <div class="chart-container">
+                    <h3 class="chart-title">City Size vs Gen Z Concentration</h3>
+                    <canvas id="scatterChart"></canvas>
+                    <p class="chart-description">
+                        No clear correlation between city size and Gen Z concentration. Both large metros and smaller cities 
+                        can achieve high Gen Z concentrations, suggesting location-specific factors are more important than size.
+                    </p>
+                </div>
+
+                <!-- Key Insights -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Key Insights</h3>
+                    </div>
+                    <div class="insights-grid">
+                        <div class="insight-item">
+                            <h4>National Benchmark</h4>
+                            <p>The 9.61% national benchmark represents 32.4 million Gen Z females out of 336.9 million total population, 
+                            providing a critical baseline for market analysis and opportunity identification.</p>
+                        </div>
+                        <div class="insight-item">
+                            <h4>Market Opportunity</h4>
+                            <p>Cities exceeding the benchmark by 20%+ (Index ≥120) represent high-potential markets for Gen Z-focused 
+                            marketing strategies and product positioning.</p>
+                        </div>
+                        <div class="insight-item">
+                            <h4>Geographic Distribution</h4>
+                            <p>Gen Z concentration varies significantly by region and city type, with university cities and specific 
+                            geographic regions showing consistent patterns of higher concentration.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Concentration Champions Tab -->
+            <div id="champions" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">The Concentration Champions</h2>
+                        <p class="card-subtitle">Where are the Gen Z female hotspots and what makes them special?</p>
+                    </div>
+                </div>
+
+                <!-- Top Champions KPI -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="championsHighestIndex">0.0</div>
+                        <div class="kpi-label">Highest Index</div>
+                        <div class="kpi-description" id="championsHighestIndexCity">Loading...</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="championsHighPotential">0</div>
+                        <div class="kpi-label">High-Potential Markets</div>
+                        <div class="kpi-description">Index ≥120</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="championsHighestConcentration">0.00%</div>
+                        <div class="kpi-label">Highest Concentration</div>
+                        <div class="kpi-description" id="championsHighestConcentrationCity">Loading...</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="championsUniversityCities">0</div>
+                        <div class="kpi-label">University Cities</div>
+                        <div class="kpi-description">In top 20</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="championsAvgIndex">0.0</div>
+                        <div class="kpi-label">Average Index</div>
+                        <div class="kpi-description">Top performers</div>
+                    </div>
+                </div>
+
+                <!-- Top Champions Chart -->
+                <div class="chart-container">
+                    <h3 class="chart-title">Top 15 Concentration Champions</h3>
+                    <canvas id="championsChart"></canvas>
+                    <p class="chart-description">
+                        Gainesville leads with an exceptional 156.3 index, followed by university cities and specific regional markets. 
+                        Notice the strong presence of university towns in the top performers.
+                    </p>
+                </div>
+
+                <!-- Market Opportunity Matrix -->
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3 class="chart-title">Market Opportunity Matrix</h3>
+                        <canvas id="opportunityMatrix"></canvas>
+                        <p class="chart-description">
+                            High-potential markets (Index ≥120) offer the best opportunities for Gen Z-focused marketing strategies.
+                        </p>
+                    </div>
+                    <div class="chart-container">
+                        <h3 class="chart-title">University vs Non-University Cities</h3>
+                        <canvas id="universityComparison"></canvas>
+                        <p class="chart-description">
+                            University cities consistently outperform non-university cities, with an average index of 115.2 vs 98.7.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Top ZIP Codes Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Top 20 ZIP Codes by Concentration</h3>
+                        <p class="card-subtitle">Highest performing ZIP codes for targeted marketing</p>
+                    </div>
+                    <div class="table-container">
+                        <table class="table" id="topZipCodesTable">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>City</th>
+                                    <th>ZIP Code</th>
+                                    <th>Population</th>
+                                    <th>Gen Z Females</th>
+                                    <th>Concentration %</th>
+                                    <th>Index</th>
+                                </tr>
+                            </thead>
+                            <tbody id="topZipCodesBody">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Key Insights -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Champion Market Insights</h3>
+                    </div>
+                    <div class="insights-grid">
+                        <div class="insight-item">
+                            <h4>University Effect</h4>
+                            <p>8 out of 15 top markets are university cities, with Gainesville (University of Florida) leading at 156.3 index. 
+                            University environments naturally concentrate Gen Z populations.</p>
+                        </div>
+                        <div class="insight-item">
+                            <h4>Regional Patterns</h4>
+                            <p>Texas and Mountain West regions dominate the top performers, suggesting regional cultural and demographic factors 
+                            that favor Gen Z concentration.</p>
+                        </div>
+                        <div class="insight-item">
+                            <h4>Market Size Diversity</h4>
+                            <p>Top performers range from small markets (Mankato: 110K) to large metros (Waco-Temple-Bryan: 1.18M), 
+                            proving that size isn't the only factor in Gen Z concentration.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Age Divide Tab -->
+            <div id="age" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">The Age Divide</h2>
+                        <p class="card-subtitle">How do different Gen Z age groups distribute geographically and what does this mean?</p>
+                    </div>
+                </div>
+
+                <!-- Age Distribution KPIs -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-value">32.6%</div>
+                        <div class="kpi-label">Age 15-19</div>
+                        <div class="kpi-description">Youngest Gen Z</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value">34.5%</div>
+                        <div class="kpi-label">Age 20-24</div>
+                        <div class="kpi-description">Middle Gen Z</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value">32.9%</div>
+                        <div class="kpi-label">Age 25-29</div>
+                        <div class="kpi-description">Oldest Gen Z</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value">0.622</div>
+                        <div class="kpi-label">Correlation</div>
+                        <div class="kpi-description">Age 20-24 vs Index</div>
+                    </div>
+                </div>
+
+                <!-- Age Distribution Charts -->
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3 class="chart-title">National Gen Z Age Distribution</h3>
+                        <canvas id="ageDistributionChart"></canvas>
+                        <p class="chart-description">
+                            The Gen Z population is relatively evenly distributed across age groups, with a slight concentration in the 20-24 range.
+                        </p>
+                    </div>
+                    <div class="chart-container">
+                        <h3 class="chart-title">Age Group vs Gen Z Index Correlation</h3>
+                        <canvas id="ageCorrelationChart"></canvas>
+                        <p class="chart-description">
+                            Age 20-24 shows the strongest positive correlation (0.622) with high Gen Z markets, suggesting this age group drives concentration.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Regional Age Patterns -->
+                <div class="chart-container">
+                    <h3 class="chart-title">Regional Age Distribution Patterns</h3>
+                    <canvas id="regionalAgeChart"></canvas>
+                    <p class="chart-description">
+                        Different regions show distinct age patterns. West Coast has more 25-29 year olds, while rural areas concentrate younger Gen Z.
+                    </p>
+                </div>
+
+                <!-- Top Markets by Age Group -->
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3 class="chart-title">Top Markets: Youngest Gen Z (15-19)</h3>
+                        <canvas id="youngestMarketsChart"></canvas>
+                        <p class="chart-description">
+                            Rural and smaller markets tend to have higher concentrations of the youngest Gen Z, with Helena leading at 40.2%.
+                        </p>
+                    </div>
+                    <div class="chart-container">
+                        <h3 class="chart-title">Top Markets: Oldest Gen Z (25-29)</h3>
+                        <canvas id="oldestMarketsChart"></canvas>
+                        <p class="chart-description">
+                            Major metropolitan areas dominate the oldest Gen Z segment, with Seattle-Tacoma leading at 36.7%.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Age Insights -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Age Segmentation Insights</h3>
+                    </div>
+                    <div class="insights-grid">
+                        <div class="insight-item">
+                            <h4>Urban vs Rural Divide</h4>
+                            <p>Youngest Gen Z (15-19) concentrates in rural areas (-0.306 correlation), while oldest Gen Z (25-29) 
+                            concentrates in major metros (-0.363 correlation). This reflects life stage migration patterns.</p>
+                        </div>
+                        <div class="insight-item">
+                            <h4>Marketing Implications</h4>
+                            <p>Different age segments require different geographic targeting strategies. 20-24 year olds drive 
+                            high-concentration markets, making them the primary target for Gen Z-focused campaigns.</p>
+                        </div>
+                        <div class="insight-item">
+                            <h4>Regional Variations</h4>
+                            <p>West Coast markets show older Gen Z profiles (35.7% age 25-29), while rural regions show younger 
+                            profiles (36.7% age 15-19), reflecting different demographic and economic patterns.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="map" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Opportunity Map</h2>
+                        <p class="card-subtitle">Coming soon - Interactive geographic analysis</p>
+                    </div>
+                    <div class="coming-soon">
+                        <p>This section will feature an interactive map with purple translucent heat overlay showing Gen Z concentration by ZIP code.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Explorer Tab -->
+            <div id="explorer" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">The Data Explorer</h2>
+                        <p class="card-subtitle">Dive deep into the data and perform your own analysis</p>
+                    </div>
+                </div>
+
+                <!-- Dynamic KPI Cards -->
+                <div class="kpi-grid" id="explorerKPIs">
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="filteredCount">29,381</div>
+                        <div class="kpi-label">ZIP Codes</div>
+                        <div class="kpi-description">Currently showing</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="avgIndex">99.1</div>
+                        <div class="kpi-label">Index</div>
+                        <div class="kpi-description">Selected data</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="totalPopulation">336.9M</div>
+                        <div class="kpi-label">Total Population</div>
+                        <div class="kpi-description">Selected data</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="totalGenZ">32.4M</div>
+                        <div class="kpi-label">Gen Z Females</div>
+                        <div class="kpi-description">Selected data</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value" id="genZPercentage">9.61%</div>
+                        <div class="kpi-label">% Gen Z Females</div>
+                        <div class="kpi-description">Selected data</div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Filters & Controls</h3>
+                        <p class="card-subtitle">Customize your data exploration</p>
+                    </div>
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label class="filter-label">City (DMA)</label>
+                            <select class="filter-select" id="dmaFilter">
+                                <option value="">All Cities</option>
+                                <!-- Options will be populated by JavaScript -->
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Index Range</label>
+                            <select class="filter-select" id="indexFilter">
+                                <option value="">All Indices</option>
+                                <option value="high">High (≥120)</option>
+                                <option value="medium-high">Medium-High (110-119)</option>
+                                <option value="medium">Medium (100-109)</option>
+                                <option value="medium-low">Medium-Low (90-99)</option>
+                                <option value="low">Low (&lt;90)</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Population Range</label>
+                            <select class="filter-select" id="populationFilter">
+                                <option value="">All Sizes</option>
+                                <option value="large">Large (≥50K)</option>
+                                <option value="medium">Medium (10K-50K)</option>
+                                <option value="small">Small (&lt;10K)</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Search ZIP Code</label>
+                            <input type="text" class="filter-input" id="zipSearch" placeholder="Enter ZIP code...">
+                        </div>
+                        <div class="filter-group">
+                            <button class="btn btn-primary" onclick="clearFilters()">Clear Filters</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summary Table (without ZIP codes) -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">City Summary Table <span style="font-size: 0.7rem; color: var(--primary-purple); font-weight: normal;">(Click city to filter)</span></h3>
+                        <p class="card-subtitle">Aggregated data by city (DMA) - click any row to see ZIP code details below</p>
+                    </div>
+                    <div class="table-container">
+                        <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <label for="summaryShowSelect" style="margin-right: 0.5rem;">Show:</label>
+                                <select id="summaryShowSelect" onchange="changeSummaryPageSize()" style="padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">
+                                    <option value="10">10</option>
+                                    <option value="25" selected>25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                <span style="margin-left: 1rem;">entries</span>
+                            </div>
+                            <div>
+                                <button class="btn btn-secondary" onclick="exportSummaryData()">Export Summary</button>
+                            </div>
+                        </div>
+                        <table class="table" id="summaryTable">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortSummaryTable(0)">City (DMA) <span class="sort-arrow">↕</span></th>
+                                    <th onclick="sortSummaryTable(1)">Population <span class="sort-arrow">↕</span></th>
+                                    <th onclick="sortSummaryTable(2)">Gen Z Females <span class="sort-arrow">↕</span></th>
+                                    <th onclick="sortSummaryTable(3)">Concentration % <span class="sort-arrow">↕</span></th>
+                                    <th onclick="sortSummaryTable(4)">Index <span class="sort-arrow">↕</span></th>
+                                    <th onclick="sortSummaryTable(5)">Age 15-19 % <span class="sort-arrow">↕</span></th>
+                                    <th onclick="sortSummaryTable(6)">Age 20-24 % <span class="sort-arrow">↕</span></th>
+                                    <th onclick="sortSummaryTable(7)">Age 25-29 % <span class="sort-arrow">↕</span></th>
+                                </tr>
+                            </thead>
+                            <tbody id="summaryTableBody">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                        <div id="summaryPagination" style="margin-top: 1rem; text-align: center;">
+                            <!-- Pagination will be generated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">DMA & ZIP Code Table</h3>
+                        <p class="card-subtitle">Explore all ZIP codes with sorting and filtering</p>
+                    </div>
+                    <div class="table-container">
+                        <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <label for="pageSize">Show:</label>
+                                <select id="pageSize" onchange="changePageSize()">
+                                    <option value="25">25</option>
+                                    <option value="50" selected>50</option>
+                                    <option value="100">100</option>
+                                    <option value="200">200</option>
+                                </select>
+                                <span>entries</span>
+                            </div>
+                            <div>
+                                <button class="btn btn-secondary" onclick="exportData()">Export Data</button>
+                            </div>
+                        </div>
+                        <table class="table" id="dataTable">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortTable(0)">City (DMA) <span class="sort-arrow">↕</span></th>
+                                    <th onclick="sortTable(1)">ZIP Code <span class="sort-arrow">↕</span></th>
+                                    <th onclick="sortTable(2)">Population <span class="sort-arrow">↕</span></th>
+                                    <th onclick="sortTable(3)">Gen Z Females <span class="sort-arrow">↕</span></th>
+                                    <th onclick="sortTable(4)">Concentration % <span class="sort-arrow">↕</span></th>
+                                    <th onclick="sortTable(5)">Index <span class="sort-arrow">↕</span></th>
+                                    <th onclick="sortTable(6)">Age 15-19 % <span class="sort-arrow">↕</span></th>
+                                    <th onclick="sortTable(7)">Age 20-24 % <span class="sort-arrow">↕</span></th>
+                                    <th onclick="sortTable(8)">Age 25-29 % <span class="sort-arrow">↕</span></th>
+                                </tr>
+                            </thead>
+                            <tbody id="dataTableBody">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                        <div id="pagination" style="margin-top: 1rem; text-align: center;">
+                            <!-- Pagination will be generated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export Options -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Export & Analysis</h3>
+                    </div>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="exportFilteredData()">Export Filtered Data</button>
+                        <button class="btn btn-secondary" onclick="exportTopPerformers()">Export Top Performers</button>
+                        <button class="btn btn-secondary" onclick="generateSummary()">Generate Summary Report</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cultural Patterns Tab -->
+            <div id="patterns" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">The Cultural Patterns</h2>
+                        <p class="card-subtitle">What cultural and demographic patterns reveal about Gen Z female distribution</p>
+                    </div>
+                </div>
+
+                <!-- Cultural Insights KPIs -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-value">8/15</div>
+                        <div class="kpi-label">University Cities</div>
+                        <div class="kpi-description">In top performers</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value">0.622</div>
+                        <div class="kpi-label">Age Correlation</div>
+                        <div class="kpi-description">20-24 vs Index</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value">115.2</div>
+                        <div class="kpi-label">University Index</div>
+                        <div class="kpi-description">Average performance</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-value">3</div>
+                        <div class="kpi-label">Key Patterns</div>
+                        <div class="kpi-description">Identified</div>
+                    </div>
+                </div>
+
+                <!-- University Cities Analysis -->
+                <div class="chart-container">
+                    <h3 class="chart-title">University Cities vs Non-University Cities Performance</h3>
+                    <canvas id="universityPatternsChart"></canvas>
+                    <p class="chart-description">
+                        University cities consistently outperform non-university cities in Gen Z concentration, 
+                        with an average index of 115.2 vs 98.7. This reflects the natural concentration of young adults in educational environments.
+                    </p>
+                </div>
+
+                <!-- Regional Cultural Patterns -->
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3 class="chart-title">Regional Cultural Patterns</h3>
+                        <canvas id="regionalPatternsChart"></canvas>
+                        <p class="chart-description">
+                            Different regions show distinct cultural patterns. Mountain West and Texas regions show higher Gen Z concentrations, 
+                            while traditional industrial regions show lower concentrations.
+                        </p>
+                    </div>
+                    <div class="chart-container">
+                        <h3 class="chart-title">Age Group Cultural Correlations</h3>
+                        <canvas id="ageCulturalChart"></canvas>
+                        <p class="chart-description">
+                            Age 20-24 shows the strongest positive correlation with high Gen Z markets (0.622), 
+                            suggesting this age group drives cultural concentration patterns.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Market Size vs Cultural Patterns -->
+                <div class="chart-container">
+                    <h3 class="chart-title">Market Size vs Cultural Concentration</h3>
+                    <canvas id="marketSizeCulturalChart"></canvas>
+                    <p class="chart-description">
+                        Cultural concentration doesn't correlate with market size. Small university towns can have higher Gen Z concentrations 
+                        than large metropolitan areas, indicating cultural factors are more important than size.
+                    </p>
+                </div>
+
+                <!-- Key Cultural Insights -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Key Cultural Insights</h3>
+                    </div>
+                    <div class="insights-grid">
+                        <div class="insight-item">
+                            <h4>University Effect</h4>
+                            <p>University cities create natural Gen Z concentration hubs. The presence of higher education institutions 
+                            attracts and retains young adults, creating sustainable Gen Z populations regardless of city size.</p>
+                        </div>
+                        <div class="insight-item">
+                            <h4>Age-Driven Patterns</h4>
+                            <p>The 20-24 age group shows the strongest correlation with high Gen Z markets, suggesting that 
+                            post-secondary education and early career stages are key drivers of Gen Z concentration.</p>
+                        </div>
+                        <div class="insight-item">
+                            <h4>Regional Cultural Factors</h4>
+                            <p>Certain regions (Mountain West, Texas) show consistently higher Gen Z concentrations, 
+                            indicating regional cultural factors that favor young adult populations beyond just economic opportunities.</p>
+                        </div>
+                        <div class="insight-item">
+                            <h4>Size Independence</h4>
+                            <p>Market size is not a predictor of Gen Z concentration. Small university towns can outperform 
+                            large metropolitan areas, proving that cultural factors outweigh scale in Gen Z attraction.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Strategic Recommendations -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Strategic Cultural Recommendations</h3>
+                    </div>
+                    <div class="recommendations">
+                        <div class="recommendation-item">
+                            <h4>🎓 University Partnership Strategy</h4>
+                            <p>Focus marketing efforts on university cities and college towns. These markets offer concentrated, 
+                            engaged Gen Z populations with higher disposable income and influence.</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <h4>📍 Regional Cultural Adaptation</h4>
+                            <p>Adapt messaging and campaigns to regional cultural patterns. Mountain West and Texas regions 
+                            may respond differently to Gen Z-focused marketing than traditional industrial regions.</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <h4>🎯 Age-Specific Targeting</h4>
+                            <p>Prioritize the 20-24 age group in high-concentration markets, as they drive the cultural 
+                            patterns that make these markets attractive to Gen Z populations.</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <h4>🏙️ Small Market Opportunities</h4>
+                            <p>Don't overlook small university towns. They often offer better Gen Z concentration ratios 
+                            than large metropolitan areas and may provide more cost-effective marketing opportunities.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="methodology" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">The Methodology</h2>
+                        <p class="card-subtitle">How we calculated indices, identified opportunities, and analyzed Gen Z female population distribution</p>
+                    </div>
+                    
+                    <!-- Data Quality Metrics -->
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-value">29,381</div>
+                            <div class="kpi-label">Total ZIP Codes</div>
+                            <div class="kpi-description">Complete coverage of US postal codes</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value">210</div>
+                            <div class="kpi-label">DMAs Analyzed</div>
+                            <div class="kpi-description">All major metropolitan areas</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value">99.8%</div>
+                            <div class="kpi-label">Population Coverage</div>
+                            <div class="kpi-description">Nearly complete US population</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value">2024</div>
+                            <div class="kpi-label">Data Accuracy</div>
+                            <div class="kpi-description">Most recent demographic data</div>
+                        </div>
+                    </div>
+
+                    <!-- Methodology Steps -->
+                    <div class="methodology-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Data Collection & Processing</h4>
+                                <p>Analyzed 29,381 ZIP codes across 210 DMAs (Designated Market Areas) containing population and Gen Z female demographic data.</p>
+                                <div class="formula-box">
+                                    <strong>National Benchmark:</strong>
+                                    <code>(Total Female GenZ / Total Population) × 100 = 9.61%</code>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>DMA-Level Index Calculation</h4>
+                                <p>Calculated concentration indices for each city (DMA) by aggregating ZIP code data.</p>
+                                <div class="formula-box">
+                                    <strong>Formula:</strong>
+                                    <code>DMA Index = (DMA Gen Z % / National Benchmark) × 100</code>
+                                    <div class="example">Example: Gainesville: (15.01% / 9.61%) × 100 = 156.3</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Concentration Categories</h4>
+                                <p>Markets are categorized based on their concentration index relative to the national benchmark.</p>
+                                <div class="categories-table">
+                                    <table>
+                                        <tr><th>Level</th><th>Index Range</th><th>Description</th><th>Count</th></tr>
+                                        <tr><td>Very High</td><td>≥130</td><td>Exceptional opportunity</td><td>1</td></tr>
+                                        <tr><td>High</td><td>120-129</td><td>High-potential markets</td><td>10</td></tr>
+                                        <tr><td>Medium-High</td><td>110-119</td><td>Above-average markets</td><td>13</td></tr>
+                                        <tr><td>Medium</td><td>100-109</td><td>Average markets</td><td>64</td></tr>
+                                        <tr><td>Medium-Low</td><td>90-99</td><td>Below-average markets</td><td>88</td></tr>
+                                        <tr><td>Low</td><td>&lt;90</td><td>Low-concentration markets</td><td>34</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 TBWA Data Intelligence. Gen Z Female Population Analysis Dashboard.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="assets/js/csv-loader.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
